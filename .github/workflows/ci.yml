@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: servelink_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install backend dependencies
+        run: cd server && npm install
+
+      - name: Install frontend dependencies
+        run: cd client && npm install
+
+      - name: Generate Prisma Client
+        run: cd server && npx prisma generate
+
+      # Uncomment jika sudah ada file lint config
+      # - name: Lint backend
+      #   run: cd server && npx eslint . --ext .ts
+      # - name: Lint frontend
+      #   run: cd client && npx eslint . --ext .tsx,.ts
+
+      # Uncomment jika sudah ada test
+      # - name: Test backend
+      #   run: cd server && npm test
+      # - name: Test frontend
+      #   run: cd client && npm test
+
+      - name: Build frontend
+        run: cd client && npm run build 

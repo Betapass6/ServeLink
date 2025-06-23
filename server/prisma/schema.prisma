@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role
+  services  Service[]
+  bookings  Booking[] @relation("BuyerBookings")
+  createdAt DateTime  @default(now())
+}
+
+enum Role {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+model Service {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  price       Int
+  category    String
+  imageUrl    String
+  sellerId    String
+  seller      User      @relation(fields: [sellerId], references: [id])
+  bookings    Booking[]
+  reviews     Review[]
+  createdAt   DateTime  @default(now())
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  date        DateTime
+  status      BookingStatus
+  note        String?
+  buyerId     String
+  buyer       User          @relation("BuyerBookings", fields: [buyerId], references: [id])
+  serviceId   String
+  service     Service       @relation(fields: [serviceId], references: [id])
+  review      Review?
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String?
+  booking   Booking  @relation(fields: [bookingId], references: [id])
+  bookingId String   @unique
+  service   Service  @relation(fields: [serviceId], references: [id])
+  serviceId String
+  createdAt DateTime @default(now())
+} 

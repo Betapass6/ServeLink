@@ -1,0 +1,27 @@
+{
+  "name": "servelink-backend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prisma": "prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.12.0",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "prisma": "^5.12.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.4"
+  }
+}
