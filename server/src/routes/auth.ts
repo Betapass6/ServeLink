@@ -1,14 +1,10 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { register, login, getProfile } from '../controllers/authController';
+import { authenticate } from '../middleware/auth';
 const router = Router();
 
-router.post('/register', (req: Request, res: Response) => {
-  // TODO: Implementasi register
-  res.json({ message: 'Register endpoint' });
-});
-
-router.post('/login', (req: Request, res: Response) => {
-  // TODO: Implementasi login
-  res.json({ message: 'Login endpoint' });
-});
+router.post('/register', register as any);
+router.post('/login', login as any);
+router.get('/me', authenticate as any, getProfile as any);
 
 export default router; 

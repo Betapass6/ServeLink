@@ -1,14 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { createReview, listReviewsByService } from '../controllers/reviewController';
+import { authenticate, authorize } from '../middleware/auth';
 const router = Router();
 
-router.post('/', (req: Request, res: Response) => {
-  // TODO: Tambah review
-  res.json({ message: 'Create review' });
-});
-
-router.get('/service/:id', (req: Request, res: Response) => {
-  // TODO: List review by service
-  res.json({ message: 'List reviews for service' });
-});
+router.post('/', authenticate as any, authorize(['BUYER']) as any, createReview);
+router.get('/service/:id', listReviewsByService);
 
 export default router; 

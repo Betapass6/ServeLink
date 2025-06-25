@@ -1,29 +1,12 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
+import { listServices, getService, createService, updateService, deleteService } from '../controllers/serviceController';
+import { authenticate, authorize } from '../middleware/auth';
 const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  // TODO: List semua layanan
-  res.json({ message: 'List services' });
-});
-
-router.get('/:id', (req: Request, res: Response) => {
-  // TODO: Detail layanan
-  res.json({ message: 'Service detail' });
-});
-
-router.post('/', (req: Request, res: Response) => {
-  // TODO: Tambah layanan
-  res.json({ message: 'Create service' });
-});
-
-router.put('/:id', (req: Request, res: Response) => {
-  // TODO: Update layanan
-  res.json({ message: 'Update service' });
-});
-
-router.delete('/:id', (req: Request, res: Response) => {
-  // TODO: Hapus layanan
-  res.json({ message: 'Delete service' });
-});
+router.get('/', listServices);
+router.get('/:id', getService);
+router.post('/', authenticate as any, authorize(['SELLER']) as any, createService);
+router.put('/:id', authenticate as any, authorize(['SELLER']) as any, updateService);
+router.delete('/:id', authenticate as any, authorize(['SELLER']) as any, deleteService);
 
 export default router; 
